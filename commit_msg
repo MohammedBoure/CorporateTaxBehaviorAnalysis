@@ -1,5 +1,1 @@
-Initial commit: Setup project structure and Germany tax analysis pipeline" -m "- Added analysis_script.py for ETR vs Profit regression modeling.
-- Included raw EUTO CbCR 2021 dataset and PDF guidelines.
-- Implemented data cleaning, log-transformation, and OLS regression (Statsmodels).
-- Configured .gitignore and requirements.txt.
-- Added output generation for 'Final_Germany_Strict_Clean.xlsx'.
+src/EUTO_Public_CbCR_Database_2021 2.xlsx src/jur_Germany_Strict_Clean.xlsx src/PS4 suggestions.pdf

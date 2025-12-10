@@ -11,7 +11,7 @@ warnings.filterwarnings("ignore")
 # CONFIGURATION
 # ==============================================================================
 INPUT_FILE = 'EUTO_Public_CbCR_Database_2021 2.xls'
-OUTPUT_FILE = 'Final_Germany_Strict_Clean.xlsx'
+OUTPUT_FILE = 'jur_Germany_Strict_Clean.xlsx'
 TARGET_COUNTRY = 'Germany'
 
 # Columns allowed in the final clean file
@@ -48,7 +48,7 @@ class DataLoader:
             return pd.read_excel(self.file_path)
 
 # ==============================================================================
-# CLASS 2: AGGRESSIVE DATA CLEANER (Transform)
+# CLASS 2: AGGRESSIVE DATA CLEANER (Transform) - CORRECTED
 # ==============================================================================
 class StrictDataCleaner:
     def __init__(self, raw_df, country):
@@ -62,10 +62,13 @@ class StrictDataCleaner:
         # 1. Clean Column Headers
         df.columns = df.columns.str.strip()
 
-        # 2. Filter Country
-        if 'upe_name' not in df.columns:
-            raise KeyError("'upe_name' column missing.")
-        df = df[df['upe_name'] == self.country].copy()
+        # 2. Filter Country (CORRECTED: Filter by Jurisdiction)
+        # We now select rows where the tax jurisdiction is 'Germany', regardless of the HQ location.
+        if 'jur_name' not in df.columns:
+            raise KeyError("'jur_name' column missing.")
+        
+        # This line is the key fix:
+        df = df[df['jur_name'] == self.country].copy()
 
         # 3. AGGRESSIVE NULL REPLACEMENT (The Fix)
         # Convert empty strings, spaces, and 'None' strings to real NaN
@@ -90,7 +93,8 @@ class StrictDataCleaner:
         # 6. Drop Completely Empty Rows (in critical columns)
         critical = ['profit_before_tax', 'tax_accrued']
         available_crit = [c for c in critical if c in df.columns]
-        df = df.dropna(subset=available_crit, how='any') # Strict drop if Profit/Tax missing
+        if available_crit:
+            df = df.dropna(subset=available_crit, how='any') # Strict drop if Profit/Tax missing
 
         # 7. Drop Completely Empty Columns
         # This will now work because we converted "" to NaN in step 3
