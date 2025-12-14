@@ -19,3 +19,6 @@ feat: implement MICE imputation for Germany and Italy tax studies
 - Fixed `log(0)` infinite errors by treating zero values in control variables (Assets/Employees) as NaNs before imputation.
 - Added detailed logging and regression outputs (Linear vs Non-linear) to verify U-shaped relationships.
 - Generated new result files: `Germany_Imputation_Results.xlsx` and `Italy_Imputation_Results_Final.xlsx`.
+-----
+
+feat: add charting functionality and generate report for resulting data
